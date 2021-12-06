@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:messages/constants.dart';
+import 'package:messages/shared/constants.dart';
 import 'package:messages/service/auth_service.dart';
+import 'package:messages/shared/strings.dart';
 
 class MessagesAppBar extends AppBar {
-  // constants
-  static const String _signOut = 'Sign Out';
-  static const String _settings = 'Settings';
-
   // constructor
   MessagesAppBar(title, {Key? key})
       : super(
@@ -16,7 +13,7 @@ class MessagesAppBar extends AppBar {
             PopupMenuButton<String>(
               onSelected: _onMenuItemSelected,
               itemBuilder: (BuildContext context) {
-                return {_signOut, _settings}
+                return {Strings.signOut, Strings.settings}
                     .map((String choice) => PopupMenuItem<String>(
                           value: choice,
                           child: Text(choice),
@@ -38,10 +35,10 @@ class MessagesAppBar extends AppBar {
   // private functions
   static void _onMenuItemSelected(String value) async {
     switch (value) {
-      case _signOut:
+      case Strings.signOut:
         await AuthService.signOut();
         break;
-      case _settings:
+      case Strings.settings:
         break;
     }
   }

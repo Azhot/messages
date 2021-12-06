@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:messages/constants.dart';
+import 'package:messages/shared/constants.dart';
 import 'package:messages/conversation_page.dart';
 import 'package:messages/model/conversation.dart';
 
