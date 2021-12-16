@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messages/shared/constants.dart';
 import 'package:messages/service/auth_service.dart';
+import 'package:messages/shared/loading.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
 
@@ -16,6 +17,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   // state variables
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
@@ -23,10 +25,12 @@ class _RegisterState extends State<Register> {
 
   // overrides
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: appBar(),
-        body: body(),
-      );
+  Widget build(BuildContext context) => _isLoading
+      ? const Loading()
+      : Scaffold(
+          appBar: appBar(),
+          body: body(),
+        );
 
   // widgets
   AppBar appBar() => AppBar(
@@ -36,6 +40,7 @@ class _RegisterState extends State<Register> {
         ),
         backgroundColor: Constants.primaryColor,
         actions: menu(),
+        actionsIconTheme: const IconThemeData(color: Constants.secondaryColor),
       );
 
   List<Widget> menu() => [
@@ -96,12 +101,15 @@ class _RegisterState extends State<Register> {
   ElevatedButton validateButton() => ElevatedButton(
         onPressed: () async {
           if (_formKey.currentState?.validate() == true) {
+            setState(() => _isLoading = true);
             dynamic result = await AuthService.registerWithEmailAndPassword(
               _email,
               _password,
             );
-            setState(
-                () => result == null ? _error = Strings.errorInvalidEmail : '');
+            setState(() {
+              result == null ? _error = Strings.errorInvalidEmail : '';
+              _isLoading = false;
+            });
           } else {
             setState(() => _error = '');
           }

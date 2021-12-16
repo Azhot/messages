@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/home_wrapper.dart';
 import 'package:messages/service/auth_service.dart';
+import 'package:messages/shared/styles.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -22,7 +23,13 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           // todo: implement a SomethingWentWrong widget
-          return const Text("Something went wrong!");
+          return Center(
+            child: Text(
+              "Oops... something went terribly wrong!",
+              style: Styles.basicTextStyle().copyWith(fontSize: 24),
+              textDirection: TextDirection.ltr,
+            ),
+          );
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
@@ -30,6 +37,7 @@ class MyApp extends StatelessWidget {
             value: AuthService.user,
             initialData: null,
             child: const MaterialApp(
+              debugShowCheckedModeBanner: false,
               home: HomeWrapper(),
             ),
           );

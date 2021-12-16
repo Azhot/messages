@@ -23,8 +23,9 @@ class Styles {
         fontSize: 12,
       );
 
-  static InputDecoration textInputDecoration(String text) => InputDecoration(
-        hintText: text,
+  static InputDecoration textInputDecoration(String hintText) =>
+      InputDecoration(
+        hintText: hintText,
         hintStyle: hintTextStyle(),
         fillColor: Colors.white,
         filled: true,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messages/shared/constants.dart';
 import 'package:messages/service/auth_service.dart';
+import 'package:messages/shared/loading.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
 
@@ -16,6 +17,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   // state variables
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
@@ -23,10 +25,12 @@ class _SignInState extends State<SignIn> {
 
   // overrides
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: appBar(),
-        body: body(),
-      );
+  Widget build(BuildContext context) => _isLoading
+      ? const Loading()
+      : Scaffold(
+          appBar: appBar(),
+          body: body(),
+        );
 
   // widgets
   AppBar appBar() => AppBar(
@@ -36,6 +40,7 @@ class _SignInState extends State<SignIn> {
         ),
         backgroundColor: Constants.primaryColor,
         actions: menu(),
+        actionsIconTheme: const IconThemeData(color: Constants.secondaryColor),
       );
 
   List<Widget> menu() => [
@@ -96,12 +101,15 @@ class _SignInState extends State<SignIn> {
   ElevatedButton validateButton() => ElevatedButton(
         onPressed: () async {
           if (_formKey.currentState?.validate() == true) {
+            setState(() => _isLoading = true);
             dynamic result = await AuthService.signInWithEmailAndPassword(
               _email,
               _password,
             );
-            setState(() =>
-                result == null ? _error = Strings.errorInvalidCredentials : '');
+            setState(() {
+              result == null ? _error = Strings.errorInvalidCredentials : '';
+              _isLoading = false;
+            });
           } else {
             setState(() => _error = '');
           }
