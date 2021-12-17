@@ -17,34 +17,64 @@ class MyApp extends StatelessWidget {
 
 // overrides
   @override
+  Widget build(BuildContext context) => const FutureAppBuilder();
+}
+
+class FutureAppBuilder extends StatelessWidget {
+  const FutureAppBuilder({
+    Key? key,
+  }) : super(key: key);
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Firebase.initializeApp(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          // todo: implement a SomethingWentWrong widget
-          return Center(
-            child: Text(
-              "Oops... something went terribly wrong!",
-              style: Styles.basicTextStyle().copyWith(fontSize: 24),
-              textDirection: TextDirection.ltr,
-            ),
-          );
+          return const SomethingWentWrong();
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          return StreamProvider<User?>.value(
-            value: AuthService.user,
-            initialData: null,
-            child: const MaterialApp(
-              debugShowCheckedModeBanner: false,
-              home: HomeWrapper(),
-            ),
-          );
+          return const UserStreamProvider();
         }
 
         return const Center(child: CircularProgressIndicator());
       },
+    );
+  }
+}
+
+class SomethingWentWrong extends StatelessWidget {
+  const SomethingWentWrong({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        "Oops... something went terribly wrong!",
+        style: Styles.basicTextStyle().copyWith(fontSize: 24),
+        textDirection: TextDirection.ltr,
+      ),
+    );
+  }
+}
+
+class UserStreamProvider extends StatelessWidget {
+  const UserStreamProvider({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamProvider<User?>.value(
+      value: AuthService.user,
+      initialData: null,
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomeWrapper(),
+      ),
     );
   }
 }

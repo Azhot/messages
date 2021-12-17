@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:messages/shared/constants.dart';
+import 'package:messages/shared/app_bar.dart';
 import 'package:messages/service/auth_service.dart';
 import 'package:messages/shared/loading.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
 
-class Register extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   // variables
   final Function _toggleView;
 
-  const Register(this._toggleView, {Key? key}) : super(key: key);
+  // constructors
+  const RegisterPage(this._toggleView, {Key? key}) : super(key: key);
 
+  // overrides
   @override
-  _RegisterState createState() => _RegisterState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterState extends State<Register> {
+// state class
+class _RegisterPageState extends State<RegisterPage> {
   // state variables
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -33,50 +36,32 @@ class _RegisterState extends State<Register> {
         );
 
   // widgets
-  AppBar appBar() => AppBar(
-        title: Text(
-          Strings.registerPageTitle,
-          style: Styles.appBarTextStyle(),
-        ),
-        backgroundColor: Constants.primaryColor,
-        actions: menu(),
-        actionsIconTheme: const IconThemeData(color: Constants.secondaryColor),
+  PreferredSizeWidget appBar() => MessageAppBar(
+        Strings.registerPageTitle,
+        {
+          Strings.signIn: widget._toggleView,
+        },
       );
 
-  List<Widget> menu() => [
-        PopupMenuButton(
-            onSelected: _onMenuItemSelected,
-            itemBuilder: (BuildContext context) {
-              return {Strings.signIn}
-                  .map((String choice) => PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice),
-                      ))
-                  .toList();
-            })
-      ];
-
-  Container body() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            spacer(),
-            emailField(),
-            spacer(),
-            passwordField(),
-            spacer(),
-            validateButton(),
-            spacer(),
-            emailErrorText()
-          ],
+  Widget body() => Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              spacer(),
+              emailField(),
+              spacer(),
+              passwordField(),
+              spacer(),
+              validateButton(),
+              spacer(),
+              emailErrorText()
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   SizedBox spacer() => const SizedBox(height: 16);
 
@@ -122,13 +107,4 @@ class _RegisterState extends State<Register> {
         _error,
         style: Styles.errorTextStyle(),
       );
-
-  // functions
-  void _onMenuItemSelected(String value) async {
-    switch (value) {
-      case Strings.signIn:
-        widget._toggleView();
-        break;
-    }
-  }
 }

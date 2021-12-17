@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messages/model/user.dart';
-import 'package:messages/screen/authenticate/authenticate.dart';
-import 'package:messages/screen/home/home.dart';
+import 'package:messages/screen/authenticate/authenticate_wrapper.dart';
+import 'package:messages/screen/conversation_list/conversation_list_page.dart';
 import 'package:provider/provider.dart';
 
 class HomeWrapper extends StatelessWidget {
@@ -10,6 +10,8 @@ class HomeWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    return (user is User) ? const Home() : const Authenticate();
+    return (user is User)
+        ? const ConversationListPage()
+        : const AuthenticateWrapper();
   }
 }

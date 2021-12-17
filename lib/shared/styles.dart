@@ -8,19 +8,34 @@ class Styles {
         fontSize: 18,
       );
 
-  static TextStyle hintTextStyle() => GoogleFonts.aBeeZee(
+  static TextStyle hintTextStyle({
+    double fontSize = 14,
+    FontWeight fontWeight = FontWeight.normal,
+  }) =>
+      GoogleFonts.aBeeZee(
         color: Constants.hintTextColor,
-        fontSize: 14,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
       );
 
-  static TextStyle basicTextStyle() => GoogleFonts.aBeeZee(
-        color: Constants.messageTextColor,
-        fontSize: 14,
+  static TextStyle basicTextStyle({
+    Color color = Constants.messageTextColor,
+    double fontSize = 14,
+    FontWeight fontWeight = FontWeight.normal,
+  }) =>
+      GoogleFonts.aBeeZee(
+        color: color,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
       );
 
-  static TextStyle errorTextStyle() => GoogleFonts.aBeeZee(
+  static TextStyle errorTextStyle({
+    double fontSize = 14,
+    FontWeight fontWeight = FontWeight.normal,
+  }) =>
+      GoogleFonts.aBeeZee(
         color: Constants.errorColor,
-        fontSize: 12,
+        fontSize: fontSize,
       );
 
   static InputDecoration textInputDecoration(String hintText) =>
@@ -33,7 +48,7 @@ class Styles {
         focusedBorder: _outlineBorder(Constants.secondaryColor),
         errorBorder: _outlineBorder(Constants.errorColor),
         focusedErrorBorder: _outlineBorder(Constants.errorColor),
-        errorStyle: errorTextStyle(),
+        errorStyle: errorTextStyle(fontSize: 12),
       );
 
   static OutlineInputBorder _outlineBorder(Color color) => OutlineInputBorder(
