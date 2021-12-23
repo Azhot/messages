@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/home_wrapper.dart';
 import 'package:messages/service/auth_service.dart';
+import 'package:messages/shared/constants.dart';
 import 'package:messages/shared/styles.dart';
 import 'package:provider/provider.dart';
 
@@ -71,9 +72,18 @@ class UserStreamProvider extends StatelessWidget {
     return StreamProvider<User?>.value(
       value: AuthService.user,
       initialData: null,
-      child: const MaterialApp(
+      child: MaterialApp(
+        theme: ThemeData().copyWith(
+          scaffoldBackgroundColor: Colors.white,
+          colorScheme: ThemeData().colorScheme.copyWith(
+                primary: Constants.primaryColor,
+                secondary: Constants.secondaryColor,
+                primaryVariant: Constants.primaryLightColor,
+                secondaryVariant: Constants.secondaryLightColor,
+              ),
+        ),
         debugShowCheckedModeBanner: false,
-        home: HomeWrapper(),
+        home: const HomeWrapper(),
       ),
     );
   }

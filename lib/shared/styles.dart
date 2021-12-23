@@ -45,7 +45,7 @@ class Styles {
         fillColor: Colors.white,
         filled: true,
         enabledBorder: _outlineBorder(Constants.primaryColor),
-        focusedBorder: _outlineBorder(Constants.secondaryColor),
+        focusedBorder: _outlineBorder(Constants.primaryDarkColor),
         errorBorder: _outlineBorder(Constants.errorColor),
         focusedErrorBorder: _outlineBorder(Constants.errorColor),
         errorStyle: errorTextStyle(fontSize: 12),
@@ -58,7 +58,7 @@ class Styles {
       );
 
   static ButtonStyle basicButtonStyle() => ElevatedButton.styleFrom(
-        primary: Constants.secondaryColor,
+        primary: Constants.primaryDarkColor,
         textStyle: const TextStyle(color: Colors.white),
       );
 }

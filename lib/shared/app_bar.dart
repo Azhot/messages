@@ -13,22 +13,29 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
   // overrides
   @override
   Widget build(BuildContext context) => AppBar(
+        iconTheme: const IconThemeData(color: Constants.primaryDarkColor),
         backgroundColor: Constants.primaryColor,
         title: barTitle(),
+        centerTitle: true,
         actions: [menu()],
-        actionsIconTheme: const IconThemeData(color: Constants.secondaryColor),
+        actionsIconTheme:
+            const IconThemeData(color: Constants.secondaryDarkColor),
       );
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
 
   // private functions
-  Text barTitle() => Text(title, style: Styles.appBarTextStyle());
+  Widget barTitle() => Text(
+        title,
+        style: Styles.appBarTextStyle(),
+      );
 
   PopupMenuButton<String> menu() => PopupMenuButton<String>(
         itemBuilder: (BuildContext context) => menuItems.keys
             .map((String choice) => PopupMenuItem<String>(
                   value: choice,
+                  textStyle: Styles.basicTextStyle(),
                   child: Text(choice),
                 ))
             .toList(),

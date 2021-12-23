@@ -24,6 +24,11 @@ class ConversationViewholder extends StatelessWidget {
   // widgets
   Widget body() => Container(
         width: double.infinity,
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Constants.primaryLightColor),
+          ),
+        ),
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,15 +43,15 @@ class ConversationViewholder extends StatelessWidget {
   Text titleText() => Text(
         conversation.title,
         style: Styles.basicTextStyle(
-            color: Constants.secondaryColor,
-            fontWeight: FontWeight.w800,
+            color: Constants.primaryDarkColor,
+            fontWeight: FontWeight.w500,
             fontSize: 16),
       );
 
   Text messageText() => Text(conversation.messages.last.text,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-      style: Styles.basicTextStyle(fontWeight: FontWeight.w400));
+      style: Styles.basicTextStyle());
 
   // functions
   void navigateToConversationPage(BuildContext context) {

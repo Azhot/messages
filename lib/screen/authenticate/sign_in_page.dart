@@ -44,7 +44,6 @@ class _SignInPageState extends State<SignInPage> {
       );
 
   Widget body() => Container(
-        color: Colors.white,
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
