@@ -1,11 +1,11 @@
-import 'package:messages/model/author.dart';
 import 'package:messages/model/conversation.dart';
 import 'package:messages/model/message.dart';
+import 'package:messages/model/user.dart';
 
 class DummyDataProvider {
-  static final List<Author> _authors = [
-    Author("Azhot"),
-    Author('Hebus'),
+  static final List<User> _authors = [
+    User("zhvK6blU6zQmiJvO57D3i9zPH732", "francois.jouvelot@gmail.com"),
+    User("123", 'Hebus'),
   ];
 
   static final List<Message> _messages = [

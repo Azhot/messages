@@ -7,8 +7,9 @@ class AuthService {
   static final firebase.FirebaseAuth _firebaseAuth =
       firebase.FirebaseAuth.instance;
 
-  static User? _userFromFirebaseUser(firebase.User? user) =>
-      user != null ? User(user.uid) : null;
+  static User? _userFromFirebaseUser(firebase.User? user) => user != null
+      ? User(user.uid, user.displayName ?? user.email ?? '')
+      : null;
 
   static Stream<User?> get user =>
       _firebaseAuth.authStateChanges().map(_userFromFirebaseUser);

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:messages/model/author.dart';
+import 'package:messages/model/user.dart';
 
 class Message {
   // variables
-  final Author author;
+  final User author;
   final int date;
   final String text;
 
@@ -39,12 +39,12 @@ class Message {
 
   // functions
   Message copyWith({
-    Author? author,
+    User? user,
     int? date,
     String? text,
   }) =>
       Message(
-        author ?? this.author,
+        user ?? this.author,
         date ?? this.date,
         text ?? this.text,
       );
@@ -56,7 +56,7 @@ class Message {
       };
 
   factory Message.fromMap(Map<String, dynamic> map) => Message(
-        Author.fromMap(map['author']),
+        User.fromMap(map['user']),
         map['date'] ?? DateTime.now().millisecondsSinceEpoch,
         map['text'] ?? '',
       );
