@@ -44,7 +44,7 @@ class Message {
     String? text,
   }) =>
       Message(
-        user ?? this.author,
+        user ?? author,
         date ?? this.date,
         text ?? this.text,
       );

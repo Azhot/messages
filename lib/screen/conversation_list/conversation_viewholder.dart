@@ -41,7 +41,7 @@ class ConversationViewholder extends StatelessWidget {
       );
 
   Text titleText() => Text(
-        conversation.title,
+        conversation.author.name,
         style: Styles.basicTextStyle(
             color: Constants.primaryDarkColor,
             fontWeight: FontWeight.w500,

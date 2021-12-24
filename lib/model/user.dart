@@ -1,52 +1,66 @@
 import 'dart:convert';
 
 class User {
+  // static constants
+  static const uidField = 'uid';
+  static const emailField = 'email';
+  static const nameField = 'name';
+
   // variables
   final String uid;
+  final String email;
   final String name;
 
   // constructors
-  User(
-    this.uid,
-    this.name,
-  );
+  User({
+    required this.uid,
+    required this.email,
+    required this.name,
+  });
 
   // overrides
   @override
-  int get hashCode => uid.hashCode ^ name.hashCode;
+  int get hashCode => uid.hashCode ^ email.hashCode ^ name.hashCode;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is User && other.uid == uid && other.name == name;
+    return other is User &&
+        other.uid == uid &&
+        other.email == email &&
+        other.name == name;
   }
 
   @override
-  String toString() => 'User(uid: $uid, name: $name)';
+  String toString() => 'User(uid: $uid, email: $email, name: $name)';
 
   // functions
   User copyWith({
     String? uid,
+    String? email,
     String? name,
   }) {
     return User(
-      uid ?? this.uid,
-      name ?? this.name,
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
-      'name': name,
+      uidField: uid,
+      emailField: email,
+      nameField: name,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      map['uid'] ?? '',
-      map['name'] ?? '',
+      uid: map[uidField] ?? '',
+      email: map[emailField] ?? '',
+      name: map[nameField] ?? '',
     );
   }
 

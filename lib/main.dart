@@ -4,13 +4,11 @@ import 'package:messages/model/user.dart';
 import 'package:messages/screen/home_wrapper.dart';
 import 'package:messages/service/auth_service.dart';
 import 'package:messages/shared/constants.dart';
-import 'package:messages/shared/styles.dart';
+import 'package:messages/shared/loading.dart';
+import 'package:messages/shared/something_went_wrong.dart';
 import 'package:provider/provider.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
-}
+Future main() async => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
 // constructor
@@ -18,73 +16,41 @@ class MyApp extends StatelessWidget {
 
 // overrides
   @override
-  Widget build(BuildContext context) => const FutureAppBuilder();
-}
+  Widget build(BuildContext context) => futureAppBuilder();
 
-class FutureAppBuilder extends StatelessWidget {
-  const FutureAppBuilder({
-    Key? key,
-  }) : super(key: key);
+  // functions
+  FutureBuilder futureAppBuilder() => FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: appBuilder(),
+      );
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Firebase.initializeApp(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const SomethingWentWrong();
-        }
+  AsyncWidgetBuilder appBuilder() =>
+      (context, snapshot) => snapshot.connectionState == ConnectionState.waiting
+          ? materialApp(const Loading())
+          : snapshot.hasError
+              ? materialApp(const SomethingWentWrong())
+              : userStreamProvider(const HomeWrapper());
 
-        if (snapshot.connectionState == ConnectionState.done) {
-          return const UserStreamProvider();
-        }
-
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-}
-
-class SomethingWentWrong extends StatelessWidget {
-  const SomethingWentWrong({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        "Oops... something went terribly wrong!",
-        style: Styles.basicTextStyle().copyWith(fontSize: 24),
-        textDirection: TextDirection.ltr,
-      ),
-    );
-  }
-}
-
-class UserStreamProvider extends StatelessWidget {
-  const UserStreamProvider({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamProvider<User?>.value(
-      value: AuthService.user,
-      initialData: null,
-      child: MaterialApp(
-        theme: ThemeData().copyWith(
-          scaffoldBackgroundColor: Colors.white,
-          colorScheme: ThemeData().colorScheme.copyWith(
-                primary: Constants.primaryColor,
-                secondary: Constants.secondaryColor,
-                primaryVariant: Constants.primaryLightColor,
-                secondaryVariant: Constants.secondaryLightColor,
-              ),
-        ),
+  MaterialApp materialApp(Widget home) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const HomeWrapper(),
-      ),
-    );
-  }
+        theme: appTheme(),
+        home: home,
+      );
+
+  ThemeData appTheme() => ThemeData().copyWith(
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ThemeData().colorScheme.copyWith(
+              primary: Constants.primaryColor,
+              secondary: Constants.secondaryColor,
+              primaryVariant: Constants.primaryLightColor,
+              secondaryVariant: Constants.secondaryLightColor,
+            ),
+      );
+
+  StreamProvider<User?> userStreamProvider(Widget home) =>
+      StreamProvider<User?>.value(
+        value: AuthService.currentUser,
+        initialData: null,
+        child: materialApp(home),
+      );
 }

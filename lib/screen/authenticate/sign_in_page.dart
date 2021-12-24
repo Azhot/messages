@@ -90,10 +90,13 @@ class _SignInPageState extends State<SignInPage> {
               _email,
               _password,
             );
-            setState(() {
-              result == null ? _error = Strings.errorInvalidCredentials : '';
-              _isLoading = false;
-            });
+
+            if (result == null) {
+              setState(() {
+                _error = Strings.errorInvalidCredentials;
+                _isLoading = false;
+              });
+            }
           } else {
             setState(() => _error = '');
           }

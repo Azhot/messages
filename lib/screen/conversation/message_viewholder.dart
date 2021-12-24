@@ -2,7 +2,6 @@ import 'package:messages/model/user.dart';
 import 'package:messages/shared/constants.dart';
 import 'package:messages/model/message.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:messages/shared/styles.dart';
 
 class MessageViewholder extends StatelessWidget {

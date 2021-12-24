@@ -26,7 +26,7 @@ class ConversationPage extends StatelessWidget {
 
   // widgets
   PreferredSizeWidget appBar() => MessageAppBar(
-        conversation.title,
+        conversation.author.name,
         const {
           Strings.signOut: AuthService.signOut,
           Strings.settings: null,

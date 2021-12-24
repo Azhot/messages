@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messages/model/user.dart';
 import 'package:messages/shared/app_bar.dart';
 import 'package:messages/service/auth_service.dart';
 import 'package:messages/shared/loading.dart';
@@ -22,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   // state variables
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
+  String _name = '';
   String _email = '';
   String _password = '';
   String _error = '';
@@ -50,6 +52,8 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             children: [
               spacer(),
+              nameField(),
+              spacer(),
               emailField(),
               spacer(),
               passwordField(),
@@ -63,6 +67,15 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   SizedBox spacer() => const SizedBox(height: 16);
+
+  TextFormField nameField() => TextFormField(
+        style: Styles.basicTextStyle(),
+        decoration: Styles.textInputDecoration(Strings.name),
+        validator: (value) => (value?.length != null && value!.length < 3)
+            ? Strings.errorInvalidName
+            : null,
+        onChanged: (value) => setState(() => _name = value),
+      );
 
   TextFormField emailField() => TextFormField(
         style: Styles.basicTextStyle(),
@@ -86,14 +99,17 @@ class _RegisterPageState extends State<RegisterPage> {
         onPressed: () async {
           if (_formKey.currentState?.validate() == true) {
             setState(() => _isLoading = true);
-            dynamic result = await AuthService.registerWithEmailAndPassword(
+            User? user = await AuthService.registerWithEmailAndPassword(
+              _name,
               _email,
               _password,
             );
-            setState(() {
-              result == null ? _error = Strings.errorInvalidEmail : '';
-              _isLoading = false;
-            });
+            if (user == null) {
+              setState(() {
+                _error = Strings.errorInvalidEmail;
+                _isLoading = false;
+              });
+            }
           } else {
             setState(() => _error = '');
           }

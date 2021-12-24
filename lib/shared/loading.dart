@@ -6,15 +6,13 @@ class Loading extends StatelessWidget {
   const Loading({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Constants.primaryColor,
-      child: const Center(
-        child: SpinKitChasingDots(
-          color: Constants.primaryDarkColor,
-          size: 50,
+  Widget build(BuildContext context) => const Material(
+        color: Constants.primaryColor,
+        child: Center(
+          child: SpinKitChasingDots(
+            color: Constants.primaryDarkColor,
+            size: 48,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
