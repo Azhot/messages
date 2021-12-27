@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:messages/shared/app_bar.dart';
-import 'package:messages/service/auth_service.dart';
-import 'package:messages/shared/loading.dart';
+import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/model/user.dart';
+import 'package:messages/shared/widget/app_bar.dart';
+import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
+import 'package:messages/dependency_injection/use_case/sign_in.dart';
 
 class SignInPage extends StatefulWidget {
   // variables
@@ -86,12 +88,10 @@ class _SignInPageState extends State<SignInPage> {
         onPressed: () async {
           if (_formKey.currentState?.validate() == true) {
             setState(() => _isLoading = true);
-            dynamic result = await AuthService.signInWithEmailAndPassword(
-              _email,
-              _password,
-            );
+            User? currentUser =
+                await inject<SignIn>().execute(_email, _password);
 
-            if (result == null) {
+            if (currentUser == null) {
               setState(() {
                 _error = Strings.errorInvalidCredentials;
                 _isLoading = false;

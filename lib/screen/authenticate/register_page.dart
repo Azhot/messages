@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:messages/model/user.dart';
-import 'package:messages/shared/app_bar.dart';
-import 'package:messages/service/auth_service.dart';
-import 'package:messages/shared/loading.dart';
+import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/shared/widget/app_bar.dart';
+import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
+import 'package:messages/dependency_injection/use_case/register_user.dart';
 
 class RegisterPage extends StatefulWidget {
   // variables
@@ -96,27 +96,28 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   ElevatedButton validateButton() => ElevatedButton(
-        onPressed: () async {
-          if (_formKey.currentState?.validate() == true) {
-            setState(() => _isLoading = true);
-            User? user = await AuthService.registerWithEmailAndPassword(
-              _name,
-              _email,
-              _password,
-            );
-            if (user == null) {
-              setState(() {
-                _error = Strings.errorInvalidEmail;
-                _isLoading = false;
-              });
-            }
-          } else {
-            setState(() => _error = '');
-          }
-        },
+        onPressed: onValidateButtonPressed,
         child: const Text(Strings.register),
         style: Styles.basicButtonStyle(),
       );
+
+  void onValidateButtonPressed() async {
+    if (_formKey.currentState?.validate() == true) {
+      setState(() => _isLoading = true);
+      if (!await inject<RegisterUser>().execute(
+        email: _email,
+        password: _password,
+        name: _name,
+      )) {
+        setState(() {
+          _error = Strings.errorInvalidEmail;
+          _isLoading = false;
+        });
+      }
+    } else {
+      setState(() => _error = '');
+    }
+  }
 
   Text emailErrorText() => Text(
         _error,

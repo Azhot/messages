@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/model/conversation.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/conversation_list/conversation_viewholder.dart';
-import 'package:messages/service/database_service.dart';
-import 'package:messages/shared/app_bar.dart';
+import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/service/dummy_data_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:messages/service/auth_service.dart';
 import 'package:messages/shared/constants.dart';
-import 'package:messages/shared/loading.dart';
-import 'package:messages/shared/something_went_wrong.dart';
+import 'package:messages/shared/widget/loading.dart';
+import 'package:messages/shared/widget/something_went_wrong.dart';
 import 'package:messages/shared/strings.dart';
+import 'package:messages/dependency_injection/use_case/sign_out.dart';
 
 class ConversationListPage extends StatelessWidget {
 // constructor
@@ -25,10 +25,10 @@ class ConversationListPage extends StatelessWidget {
       );
 
 // private functions
-  MessageAppBar appBar() => const MessageAppBar(
+  MessageAppBar appBar() => MessageAppBar(
         Strings.homePageTitle,
         {
-          Strings.signOut: AuthService.signOut,
+          Strings.signOut: inject<SignOut>().execute,
           Strings.settings: null,
         },
       );
@@ -62,7 +62,9 @@ class ConversationListPage extends StatelessWidget {
 
   StreamBuilder<QuerySnapshot> usersStreamBuilder(BuildContext context) =>
       StreamBuilder<QuerySnapshot>(
-        stream: DatabaseService.users,
+        stream: inject<FirebaseFirestore>()
+            .collection(User.usersCollection)
+            .snapshots(),
         builder: (context, snapshot) =>
             snapshot.connectionState == ConnectionState.waiting
                 ? const Loading()

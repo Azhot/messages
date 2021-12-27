@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class User {
   // static constants
+  static const usersCollection = 'users';
   static const uidField = 'uid';
   static const emailField = 'email';
   static const nameField = 'name';
@@ -67,4 +69,12 @@ class User {
   String toJson() => json.encode(toMap());
 
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
+
+  static User? fromAuthUser(auth.User? user) => user != null
+      ? User(
+          uid: user.uid,
+          email: user.email ?? '',
+          name: user.displayName ?? '',
+        )
+      : null;
 }

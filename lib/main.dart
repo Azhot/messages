@@ -1,14 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/home_wrapper.dart';
-import 'package:messages/service/auth_service.dart';
 import 'package:messages/shared/constants.dart';
-import 'package:messages/shared/loading.dart';
-import 'package:messages/shared/something_went_wrong.dart';
+import 'package:messages/shared/widget/loading.dart';
+import 'package:messages/shared/widget/something_went_wrong.dart';
 import 'package:provider/provider.dart';
 
-Future main() async => runApp(const MyApp());
+Future main() async {
+  configureDependencyInjection();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
 // constructor
@@ -49,7 +53,9 @@ class MyApp extends StatelessWidget {
 
   StreamProvider<User?> userStreamProvider(Widget home) =>
       StreamProvider<User?>.value(
-        value: AuthService.currentUser,
+        value: inject<auth.FirebaseAuth>()
+            .authStateChanges()
+            .map((user) => User.fromAuthUser(user)),
         initialData: null,
         child: materialApp(home),
       );

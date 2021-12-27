@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:messages/shared/constants.dart';
 
-class Styles {
+abstract class Styles {
   static TextStyle appBarTextStyle() => GoogleFonts.aBeeZee(
         color: Constants.secondaryColor,
         fontSize: 18,

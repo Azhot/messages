@@ -1,4 +1,4 @@
-class Strings {
+abstract class Strings {
   static const somethingWentWrong = 'Oops... \nsomething went terribly wrong!';
   static const homePageTitle = "Home page";
   static const signInPageTitle = "Sign in";

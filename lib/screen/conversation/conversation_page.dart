@@ -1,9 +1,8 @@
 import 'package:messages/model/user.dart';
-import 'package:messages/shared/app_bar.dart';
+import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/screen/conversation/message_viewholder.dart';
 import 'package:messages/model/conversation.dart';
 import 'package:flutter/material.dart';
-import 'package:messages/service/auth_service.dart';
 import 'package:messages/shared/constants.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
@@ -28,7 +27,6 @@ class ConversationPage extends StatelessWidget {
   PreferredSizeWidget appBar() => MessageAppBar(
         conversation.author.name,
         const {
-          Strings.signOut: AuthService.signOut,
           Strings.settings: null,
         },
       );

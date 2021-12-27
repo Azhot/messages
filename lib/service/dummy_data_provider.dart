@@ -5,7 +5,7 @@ import 'package:messages/model/user.dart';
 class DummyDataProvider {
   static final List<User> authors = [
     User(
-        uid: 'zZIQ26PZ9ycilRQ1d8CRouAV7tB2',
+        uid: 'GRlgMH4FlxPAAl79zfU8HaL2ngu1',
         name: 'Azhot',
         email: 'francois.jouvelot@gmail.com'),
     User(uid: '123', name: 'Hebus', email: 'hebus.jouvelot@gmail.com'),
