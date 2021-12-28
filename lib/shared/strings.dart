@@ -18,4 +18,5 @@ abstract class Strings {
   static const errorInvalidCredentials =
       'Could not sign in with those credentials';
   static const writeAMessage = "Write a message...";
+  static const newConversationTitle = "New conversation title...";
 }

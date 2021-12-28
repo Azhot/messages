@@ -3,6 +3,7 @@ import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/model/conversation.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/conversation_list/conversation_viewholder.dart';
+import 'package:messages/shared/styles.dart';
 import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/service/dummy_data_provider.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +56,50 @@ class ConversationListPage extends StatelessWidget {
         onPressed: () => {
           showModalBottomSheet(
             context: context,
-            builder: (context) => usersStreamBuilder(context),
+            builder: (context) => modalBottomSheet(context),
           )
         },
+      );
+
+  Widget modalBottomSheet(BuildContext context) => Column(
+        children: [
+          conversationTitle(),
+          Expanded(child: usersStreamBuilder(context)),
+        ],
+      );
+
+  Widget conversationTitle() => Theme(
+        data: ThemeData().copyWith(
+          scaffoldBackgroundColor: Colors.white,
+          colorScheme: ThemeData()
+              .colorScheme
+              .copyWith(primary: Constants.secondaryLightColor),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Constants.primaryLightColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade300,
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: Offset.fromDirection(-1, 0),
+              ),
+            ],
+          ),
+          child: TextField(
+            style: Styles.basicTextStyle(),
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(16),
+              hintText: Strings.newConversationTitle,
+              hintStyle: Styles.hintTextStyle(),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () => {},
+              ),
+            ),
+          ),
+        ),
       );
 
   StreamBuilder<QuerySnapshot> usersStreamBuilder(BuildContext context) =>
