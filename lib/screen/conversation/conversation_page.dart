@@ -47,13 +47,13 @@ class ConversationPage extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Constants.primaryLightColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.shade200,
+                color: Colors.grey.shade300,
                 spreadRadius: 1,
                 blurRadius: 1,
-                offset: Offset.fromDirection(-1, 2),
+                offset: Offset.fromDirection(-1, 0),
               ),
             ],
           ),
@@ -62,8 +62,9 @@ class ConversationPage extends StatelessWidget {
             minLines: 1,
             style: Styles.basicTextStyle(),
             decoration: InputDecoration(
+              border: InputBorder.none,
               contentPadding: const EdgeInsets.all(16),
-              hintText: "Write a message",
+              hintText: Strings.writeAMessage,
               hintStyle: Styles.hintTextStyle(),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.send),

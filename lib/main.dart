@@ -5,11 +5,13 @@ import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/home_wrapper.dart';
 import 'package:messages/shared/constants.dart';
+import 'package:messages/shared/styles.dart';
 import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/widget/something_went_wrong.dart';
 import 'package:provider/provider.dart';
 
 Future main() async {
+  Styles.setSystemOverlayStyle();
   configureDependencyInjection();
   runApp(const MyApp());
 }

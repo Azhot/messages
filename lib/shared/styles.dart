@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:messages/shared/constants.dart';
 
 abstract class Styles {
+  static void setSystemOverlayStyle() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Constants.primaryDarkColor,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Constants.primaryLightColor,
+      systemNavigationBarDividerColor: Constants.primaryLightColor,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
+  }
+
   static TextStyle appBarTextStyle() => GoogleFonts.aBeeZee(
         color: Constants.secondaryColor,
         fontSize: 18,

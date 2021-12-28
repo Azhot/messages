@@ -7,7 +7,7 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Material(
-        color: Constants.primaryColor,
+        color: Constants.primaryLightColor,
         child: Center(
           child: SpinKitChasingDots(
             color: Constants.primaryDarkColor,
