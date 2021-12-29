@@ -13,13 +13,13 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
   // overrides
   @override
   Widget build(BuildContext context) => AppBar(
-        iconTheme: const IconThemeData(color: Constants.primaryDarkColor),
+        iconTheme: const IconThemeData(color: Constants.primaryColorDark),
         backgroundColor: Constants.primaryColor,
         title: barTitle(),
         centerTitle: true,
         actions: [menu()],
         actionsIconTheme:
-            const IconThemeData(color: Constants.secondaryDarkColor),
+            const IconThemeData(color: Constants.secondaryColorDark),
       );
 
   @override

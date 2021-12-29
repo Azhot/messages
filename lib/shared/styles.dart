@@ -6,13 +6,27 @@ import 'package:messages/shared/constants.dart';
 abstract class Styles {
   static void setSystemOverlayStyle() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Constants.primaryDarkColor,
+      statusBarColor: Constants.primaryColorDark,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Constants.primaryLightColor,
-      systemNavigationBarDividerColor: Constants.primaryLightColor,
+      systemNavigationBarColor: Constants.primaryColorLight,
+      systemNavigationBarDividerColor: Constants.primaryColorLight,
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
   }
+
+  static ThemeData appTheme({Color primaryColor = Constants.primaryColor}) =>
+      ThemeData(
+          primaryColor: primaryColor,
+          primaryColorLight: Constants.primaryColorLight,
+          primaryColorDark: Constants.primaryColorDark,
+          fontFamily: GoogleFonts.aBeeZee().fontFamily,
+          scaffoldBackgroundColor: Colors.white,
+          colorScheme: ThemeData().colorScheme.copyWith(
+                primary: primaryColor,
+                secondary: Constants.secondaryColor,
+                primaryVariant: Constants.primaryColorLight,
+                secondaryVariant: Constants.secondaryColorLight,
+              ));
 
   static TextStyle appBarTextStyle() => GoogleFonts.aBeeZee(
         color: Constants.secondaryColor,
@@ -56,7 +70,7 @@ abstract class Styles {
         fillColor: Colors.white,
         filled: true,
         enabledBorder: _outlineBorder(Constants.primaryColor),
-        focusedBorder: _outlineBorder(Constants.primaryDarkColor),
+        focusedBorder: _outlineBorder(Constants.primaryColorDark),
         errorBorder: _outlineBorder(Constants.errorColor),
         focusedErrorBorder: _outlineBorder(Constants.errorColor),
         errorStyle: errorTextStyle(fontSize: 12),
@@ -69,7 +83,7 @@ abstract class Styles {
       );
 
   static ButtonStyle basicButtonStyle() => ElevatedButton.styleFrom(
-        primary: Constants.primaryDarkColor,
+        primary: Constants.primaryColorDark,
         textStyle: const TextStyle(color: Colors.white),
       );
 }

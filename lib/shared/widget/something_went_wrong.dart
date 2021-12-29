@@ -10,7 +10,7 @@ class SomethingWentWrong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-        color: Constants.primaryLightColor,
+        color: Constants.primaryColorLight,
         child: Center(
           child: Text(
             Strings.somethingWentWrong,
