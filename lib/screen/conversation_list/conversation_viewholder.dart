@@ -26,7 +26,7 @@ class ConversationViewholder extends StatelessWidget {
         width: double.infinity,
         decoration: const BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: Constants.primaryLightColor),
+            bottom: BorderSide(color: Constants.primaryColorLight),
           ),
         ),
         padding: const EdgeInsets.all(16),
@@ -41,14 +41,14 @@ class ConversationViewholder extends StatelessWidget {
       );
 
   Text titleText() => Text(
-        conversation.author.name,
+        conversation.title,
         style: Styles.basicTextStyle(
-            color: Constants.primaryDarkColor,
+            color: Constants.primaryColorDark,
             fontWeight: FontWeight.w500,
             fontSize: 16),
       );
 
-  Text messageText() => Text(conversation.messages.last.text,
+  Text messageText() => Text('set a subtitle',
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
       style: Styles.basicTextStyle());

@@ -1,64 +1,72 @@
 import 'dart:convert';
 
-import 'package:messages/model/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Message {
+  // static constants
+  static const messagesCollection = 'messages';
+  static const authorIdField = 'authorId';
+  static const dateField = 'date';
+  static const textField = 'text';
+
   // variables
-  final User author;
+  final String authorId;
   final int date;
   final String text;
 
   // constructors
-  Message(
-    this.author,
-    this.date,
-    this.text,
-  );
-
-  Message.now(
-    this.author,
-    this.text,
-  ) : date = DateTime.now().millisecondsSinceEpoch;
+  Message({
+    required this.authorId,
+    required this.date,
+    required this.text,
+  });
 
   // overrides
   @override
-  int get hashCode => author.hashCode ^ date.hashCode ^ text.hashCode;
+  int get hashCode => authorId.hashCode ^ date.hashCode ^ text.hashCode;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is Message &&
-        other.author == author &&
+        other.authorId == authorId &&
         other.date == date &&
         other.text == text;
   }
 
   @override
-  String toString() => 'Message(author: $author, date: $date, text: $text)';
+  String toString() =>
+      'Message($authorIdField: $authorId, $dateField: $date, $textField: $text)';
 
   // functions
   Message copyWith({
-    User? user,
+    String? authorId,
     int? date,
     String? text,
   }) =>
       Message(
-        user ?? author,
-        date ?? this.date,
-        text ?? this.text,
+        authorId: authorId ?? this.authorId,
+        date: date ?? this.date,
+        text: text ?? this.text,
       );
 
   Map<String, dynamic> toMap() => {
-        'author': author,
-        'date': date,
-        'text': text,
+        authorIdField: authorId,
+        dateField: date,
+        textField: text,
       };
 
   factory Message.fromMap(Map<String, dynamic> map) => Message(
-        User.fromMap(map['user']),
-        map['date'] ?? DateTime.now().millisecondsSinceEpoch,
-        map['text'] ?? '',
+        authorId: map[authorIdField] ?? '',
+        date: map[dateField]?.toInt() ?? 0,
+        text: map[textField] ?? '',
+      );
+
+  factory Message.fromDocumentSnapshot(DocumentSnapshot doc) => Message(
+        authorId: doc[authorIdField],
+        date: doc[dateField],
+        text: doc[textField],
       );
 
   String toJson() => json.encode(toMap());

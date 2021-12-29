@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:messages/dependency_injection/injection.dart';
-import 'package:messages/model/user.dart';
 import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/strings.dart';
@@ -88,10 +87,7 @@ class _SignInPageState extends State<SignInPage> {
         onPressed: () async {
           if (_formKey.currentState?.validate() == true) {
             setState(() => _isLoading = true);
-            User? currentUser =
-                await inject<SignIn>().execute(_email, _password);
-
-            if (currentUser == null) {
+            if (await inject<SignIn>().execute(_email, _password) == null) {
               setState(() {
                 _error = Strings.errorInvalidCredentials;
                 _isLoading = false;

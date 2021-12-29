@@ -1,77 +1,87 @@
-import 'package:messages/model/user.dart';
-import 'package:messages/shared/widget/app_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/scheduler.dart';
+import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/dependency_injection/use_case/add_message_to_conversation.dart';
+import 'package:messages/dependency_injection/use_case/get_messages.dart';
+import 'package:messages/model/message.dart';
 import 'package:messages/screen/conversation/message_viewholder.dart';
+import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/model/conversation.dart';
 import 'package:flutter/material.dart';
-import 'package:messages/shared/constants.dart';
 import 'package:messages/shared/strings.dart';
-import 'package:messages/shared/styles.dart';
-import 'package:provider/provider.dart';
+import 'package:messages/shared/widget/loading.dart';
+import 'package:messages/shared/widget/send_text_field.dart';
+import 'package:messages/shared/widget/something_went_wrong.dart';
 
 class ConversationPage extends StatelessWidget {
   // variables
   final Conversation conversation;
+  final ScrollController _controller = ScrollController();
 
   // constructors
-  const ConversationPage(this.conversation, {Key? key}) : super(key: key);
+  ConversationPage(this.conversation, {Key? key}) : super(key: key);
 
   // overrides
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: appBar(),
-        body: listMessage(context),
-        bottomSheet: newMessage(),
+        body: messagesStreamBuilder(context),
       );
 
   // widgets
   PreferredSizeWidget appBar() => MessageAppBar(
-        conversation.author.name,
+        conversation.title,
         const {
           Strings.settings: null,
         },
       );
 
-  Widget listMessage(BuildContext context) => SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      child: Column(
-        children: MessageViewholder.toMessageViewholders(
-            conversation.messages, Provider.of<User>(context)),
-      ));
+  Widget messagesStreamBuilder(BuildContext context) =>
+      StreamBuilder<QuerySnapshot>(
+          stream: inject<GetMessages>().execute(conversation),
+          builder: (context, snapshot) =>
+              snapshot.connectionState == ConnectionState.waiting
+                  ? const Loading()
+                  : (snapshot.hasError || snapshot.data == null)
+                      ? const SomethingWentWrong()
+                      : body(snapshot.data!));
 
-  Widget newMessage() => Theme(
-        data: ThemeData().copyWith(
-          scaffoldBackgroundColor: Colors.white,
-          colorScheme: ThemeData()
-              .colorScheme
-              .copyWith(primary: Constants.secondaryLightColor),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Constants.primaryLightColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade300,
-                spreadRadius: 1,
-                blurRadius: 1,
-                offset: Offset.fromDirection(-1, 0),
-              ),
-            ],
-          ),
-          child: TextField(
-            maxLines: 5,
-            minLines: 1,
-            style: Styles.basicTextStyle(),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(16),
-              hintText: Strings.writeAMessage,
-              hintStyle: Styles.hintTextStyle(),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () => {},
-              ),
-            ),
-          ),
-        ),
+  Widget body(QuerySnapshot snapshot) => Column(
+        children: [
+          listMessages(snapshot),
+          sendMessage(),
+        ],
+      );
+
+  Widget listMessages(QuerySnapshot snapshot) {
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      _controller.jumpTo(_controller.position.maxScrollExtent);
+    });
+    return Expanded(
+      child: ListView(
+        controller: _controller,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+        children: MessageViewholder.toMessageViewholders(
+            messages: snapshot.docs
+                .map((doc) => Message.fromDocumentSnapshot(doc))
+                .toList(),
+            currentUserId: inject<auth.FirebaseAuth>().currentUser?.uid),
+      ),
+    );
+  }
+
+  Widget sendMessage() => SendTextField(
+        hintText: Strings.writeAMessage,
+        maxLines: 5,
+        onSend: (String text) => {
+          inject<AddMessageToConversation>().execute(
+              conversationId: conversation.uid,
+              authorId: auth.FirebaseAuth.instance.currentUser!.uid,
+              date: DateTime.now().millisecondsSinceEpoch,
+              text: text),
+        },
       );
 }

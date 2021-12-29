@@ -17,8 +17,9 @@ class SignIn {
     try {
       auth.UserCredential credential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
-      if (credential.user == null) throw Exception();
-      return User.fromAuthUser(credential.user);
+      return credential.user != null
+          ? User.fromAuthUser(credential.user!)
+          : throw Exception();
     } catch (e) {
       log("Registering failed!", error: e);
       return null;

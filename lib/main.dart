@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/dependency_injection/use_case/observe_auth_state_changes.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/home_wrapper.dart';
-import 'package:messages/shared/constants.dart';
 import 'package:messages/shared/styles.dart';
 import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/widget/something_went_wrong.dart';
@@ -39,25 +38,13 @@ class MyApp extends StatelessWidget {
 
   MaterialApp materialApp(Widget home) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: appTheme(),
+        theme: Styles.appTheme(),
         home: home,
-      );
-
-  ThemeData appTheme() => ThemeData().copyWith(
-        scaffoldBackgroundColor: Colors.white,
-        colorScheme: ThemeData().colorScheme.copyWith(
-              primary: Constants.primaryColor,
-              secondary: Constants.secondaryColor,
-              primaryVariant: Constants.primaryLightColor,
-              secondaryVariant: Constants.secondaryLightColor,
-            ),
       );
 
   StreamProvider<User?> userStreamProvider(Widget home) =>
       StreamProvider<User?>.value(
-        value: inject<auth.FirebaseAuth>()
-            .authStateChanges()
-            .map((user) => User.fromAuthUser(user)),
+        value: inject<ObserveAuthStateChanges>().execute(),
         initialData: null,
         child: materialApp(home),
       );

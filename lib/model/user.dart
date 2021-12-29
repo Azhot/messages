@@ -35,7 +35,8 @@ class User {
   }
 
   @override
-  String toString() => 'User(uid: $uid, email: $email, name: $name)';
+  String toString() =>
+      'User($uidField: $uid, $emailField: $email, $nameField: $name)';
 
   // functions
   User copyWith({
@@ -70,11 +71,9 @@ class User {
 
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
-  static User? fromAuthUser(auth.User? user) => user != null
-      ? User(
-          uid: user.uid,
-          email: user.email ?? '',
-          name: user.displayName ?? '',
-        )
-      : null;
+  factory User.fromAuthUser(auth.User user) => User(
+        uid: user.uid,
+        email: user.email ?? '',
+        name: user.displayName ?? '',
+      );
 }

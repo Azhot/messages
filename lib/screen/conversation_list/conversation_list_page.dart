@@ -1,27 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/dependency_injection/use_case/create_conversation.dart';
+import 'package:messages/dependency_injection/use_case/get_conversations.dart';
+import 'package:messages/dependency_injection/use_case/get_users.dart';
 import 'package:messages/model/conversation.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/conversation_list/conversation_viewholder.dart';
-import 'package:messages/shared/styles.dart';
 import 'package:messages/shared/widget/app_bar.dart';
-import 'package:messages/service/dummy_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:messages/shared/constants.dart';
 import 'package:messages/shared/widget/loading.dart';
+import 'package:messages/shared/widget/send_text_field.dart';
 import 'package:messages/shared/widget/something_went_wrong.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/dependency_injection/use_case/sign_out.dart';
 
 class ConversationListPage extends StatelessWidget {
+// variables
+  final TextEditingController controller = TextEditingController();
+
 // constructor
-  const ConversationListPage({Key? key}) : super(key: key);
+  ConversationListPage({Key? key}) : super(key: key);
 
 // overrides
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: appBar(),
-        body: conversationList(),
+        body: conversationList(context),
         floatingActionButton: floatingActionButton(context),
       );
 
@@ -34,14 +39,32 @@ class ConversationListPage extends StatelessWidget {
         },
       );
 
-  SingleChildScrollView conversationList() {
+  SingleChildScrollView conversationList(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: toConversationViewHolders(
-            DummyDataProvider.provideDummyConversation()),
-      ),
+      child: conversationsStreamBuilder(context),
     );
   }
+
+  StreamBuilder<QuerySnapshot> conversationsStreamBuilder(
+          BuildContext context) =>
+      StreamBuilder<QuerySnapshot>(
+        stream: inject<GetConversations>().execute(),
+        builder: (context, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? const Loading()
+            : snapshot.hasError
+                ? const SomethingWentWrong()
+                : snapshot.data != null
+                    ? Column(
+                        children: snapshot.data!.docs
+                            .map((doc) => ConversationViewholder(Conversation(
+                                uid: doc.id,
+                                title: doc[Conversation.titleField],
+                                lastUpdate: doc[Conversation.lastUpdateField])))
+                            .toList(),
+                      )
+                    : const SomethingWentWrong(),
+      );
 
   List<ConversationViewholder> toConversationViewHolders(
     List<Conversation> conversations,
@@ -56,57 +79,41 @@ class ConversationListPage extends StatelessWidget {
         onPressed: () => {
           showModalBottomSheet(
             context: context,
-            builder: (context) => modalBottomSheet(context),
+            builder: (context) => ModalBottomSheet(controller),
           )
         },
       );
+}
 
-  Widget modalBottomSheet(BuildContext context) => Column(
+class ModalBottomSheet extends StatelessWidget {
+  // variables
+  final TextEditingController controller;
+
+  // constructors
+  const ModalBottomSheet(this.controller, {Key? key}) : super(key: key);
+
+  // overrides
+  @override
+  Widget build(BuildContext context) => Column(
         children: [
-          conversationTitle(),
+          conversationTitleField(context),
           Expanded(child: usersStreamBuilder(context)),
         ],
       );
 
-  Widget conversationTitle() => Theme(
-        data: ThemeData().copyWith(
-          scaffoldBackgroundColor: Colors.white,
-          colorScheme: ThemeData()
-              .colorScheme
-              .copyWith(primary: Constants.secondaryLightColor),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Constants.primaryLightColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade300,
-                spreadRadius: 1,
-                blurRadius: 1,
-                offset: Offset.fromDirection(-1, 0),
-              ),
-            ],
-          ),
-          child: TextField(
-            style: Styles.basicTextStyle(),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(16),
-              hintText: Strings.newConversationTitle,
-              hintStyle: Styles.hintTextStyle(),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () => {},
-              ),
-            ),
-          ),
-        ),
+  // functions
+  Widget conversationTitleField(BuildContext context) => SendTextField(
+        hintText: Strings.newConversationTitle,
+        maxLines: 1,
+        onSend: (String text) => {
+          inject<CreateConversation>().execute(title: text),
+          Navigator.pop(context)
+        },
       );
 
   StreamBuilder<QuerySnapshot> usersStreamBuilder(BuildContext context) =>
       StreamBuilder<QuerySnapshot>(
-        stream: inject<FirebaseFirestore>()
-            .collection(User.usersCollection)
-            .snapshots(),
+        stream: inject<GetUsers>().execute(),
         builder: (context, snapshot) =>
             snapshot.connectionState == ConnectionState.waiting
                 ? const Loading()
@@ -118,7 +125,7 @@ class ConversationListPage extends StatelessWidget {
       );
 
   Widget usersListView(List<QueryDocumentSnapshot> docs) => Material(
-      color: Constants.primaryLightColor,
+      color: Constants.primaryColorLight,
       child: ListView(children: docs.map((doc) => userTile(doc)).toList()));
 
   ListTile userTile(QueryDocumentSnapshot doc) => ListTile(
@@ -126,7 +133,7 @@ class ConversationListPage extends StatelessWidget {
             height: double.infinity,
             child: Icon(
               Icons.person_add,
-              color: Constants.secondaryLightColor,
+              color: Constants.secondaryColorLight,
               size: 32,
             )),
         title: Text(doc[User.nameField]),
