@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/dependency_injection/use_case/get_conversation_subtitle.dart';
 import 'package:messages/shared/constants.dart';
 import 'package:messages/screen/conversation/conversation_page.dart';
 import 'package:messages/model/conversation.dart';
@@ -33,14 +35,14 @@ class ConversationViewholder extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            titleText(),
+            title(),
             const SizedBox(height: 4),
-            messageText(),
+            subtitle(),
           ],
         ),
       );
 
-  Text titleText() => Text(
+  Widget title() => Text(
         conversation.title,
         style: Styles.basicTextStyle(
             color: Constants.primaryColorDark,
@@ -48,19 +50,20 @@ class ConversationViewholder extends StatelessWidget {
             fontSize: 16),
       );
 
-  Text messageText() => Text('set a subtitle',
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-      style: Styles.basicTextStyle());
+  Widget subtitle() => FutureBuilder<String>(
+        future: inject<GetConversationSubtitle>().execute(conversation),
+        builder: (context, snapshot) => Text(
+          snapshot.data ?? '',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: Styles.hintTextStyle(),
+        ),
+      );
 
   // functions
   void navigateToConversationPage(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ConversationPage(
-          conversation,
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => ConversationPage(conversation)),
     );
   }
 }
