@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/dependency_injection/use_case/add_message_to_conversation.dart';
+import 'package:messages/dependency_injection/use_case/delete_conversation.dart';
 import 'package:messages/dependency_injection/use_case/get_messages.dart';
 import 'package:messages/model/message.dart';
 import 'package:messages/screen/conversation/message_viewholder.dart';
@@ -24,14 +25,20 @@ class ConversationPage extends StatelessWidget {
   // overrides
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: appBar(),
+        appBar: appBar(context),
         body: messagesStreamBuilder(context),
       );
 
   // widgets
-  PreferredSizeWidget appBar() => MessageAppBar(
+  PreferredSizeWidget appBar(BuildContext context) => MessageAppBar(
         title: conversation.title,
-        menuItems: const {Strings.settings: null},
+        menuItems: {
+          Strings.deleteConversation: () => {
+                inject<DeleteConversation>()
+                    .execute(conversation: conversation),
+                Navigator.of(context).pop()
+              },
+        },
       );
 
   Widget messagesStreamBuilder(BuildContext context) =>

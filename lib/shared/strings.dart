@@ -19,4 +19,5 @@ abstract class Strings {
       'Could not sign in with those credentials';
   static const writeAMessage = "Write a message...";
   static const newConversationTitle = "New conversation title...";
+  static const deleteConversation = "Delete conversation";
 }

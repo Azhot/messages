@@ -9,16 +9,17 @@ import 'package:firebase_auth/firebase_auth.dart' as _i3;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import 'firebase_module.dart' as _i17;
+import 'firebase_module.dart' as _i18;
 import 'use_case/add_message_to_conversation.dart' as _i14;
 import 'use_case/create_conversation.dart' as _i15;
+import 'use_case/delete_conversation.dart' as _i16;
 import 'use_case/get_conversation_subtitle.dart' as _i5;
 import 'use_case/get_conversations.dart' as _i6;
 import 'use_case/get_messages.dart' as _i7;
 import 'use_case/get_user_name.dart' as _i8;
 import 'use_case/get_users.dart' as _i9;
 import 'use_case/observe_auth_state_changes.dart' as _i10;
-import 'use_case/register_user.dart' as _i16;
+import 'use_case/register_user.dart' as _i17;
 import 'use_case/sign_in.dart' as _i11;
 import 'use_case/sign_out.dart' as _i12;
 import 'use_case/update_user_data.dart'
@@ -51,9 +52,11 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i14.AddMessageToConversation(get<_i4.FirebaseFirestore>()));
   gh.factory<_i15.CreateConversation>(
       () => _i15.CreateConversation(get<_i4.FirebaseFirestore>()));
-  gh.factory<_i16.RegisterUser>(() =>
-      _i16.RegisterUser(get<_i3.FirebaseAuth>(), get<_i13.UpdateUserData>()));
+  gh.factory<_i16.DeleteConversation>(
+      () => _i16.DeleteConversation(get<_i4.FirebaseFirestore>()));
+  gh.factory<_i17.RegisterUser>(() =>
+      _i17.RegisterUser(get<_i3.FirebaseAuth>(), get<_i13.UpdateUserData>()));
   return get;
 }
 
-class _$FirebaseModule extends _i17.FirebaseModule {}
+class _$FirebaseModule extends _i18.FirebaseModule {}
