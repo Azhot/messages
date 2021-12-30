@@ -48,6 +48,7 @@ class _SendTextFieldState extends State<SendTextField> {
         controller: _controller,
         onChanged: (value) => setState(() {}),
         minLines: 1,
+        onSubmitted: _controller.text.isNotEmpty ? (_) => sendAction() : null,
         maxLines: widget.maxLines,
         keyboardType: TextInputType.text,
         textCapitalization: TextCapitalization.sentences,
@@ -64,12 +65,12 @@ class _SendTextFieldState extends State<SendTextField> {
         icon: const Icon(Icons.send),
         splashColor: Colors.green,
         splashRadius: 10,
-        onPressed: _controller.text.isNotEmpty
-            ? () => {
-                  widget.onSend(_controller.text),
-                  setState(_controller.clear),
-                  FocusScope.of(context).previousFocus()
-                }
-            : null,
+        onPressed: _controller.text.isNotEmpty ? () => sendAction() : null,
       );
+
+  void Function()? sendAction() {
+    widget.onSend(_controller.text);
+    setState(_controller.clear);
+    FocusScope.of(context).previousFocus();
+  }
 }
