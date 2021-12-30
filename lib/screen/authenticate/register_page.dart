@@ -39,10 +39,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // widgets
   PreferredSizeWidget appBar() => MessageAppBar(
-        Strings.registerPageTitle,
-        {
-          Strings.signIn: widget._toggleView,
-        },
+        title: Strings.registerPageTitle,
+        menuItems: {Strings.signIn: widget._toggleView},
       );
 
   Widget body() => Container(

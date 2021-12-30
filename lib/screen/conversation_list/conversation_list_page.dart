@@ -32,8 +32,8 @@ class ConversationListPage extends StatelessWidget {
 
 // private functions
   MessageAppBar appBar() => MessageAppBar(
-        Strings.homePageTitle,
-        {
+        title: Strings.homePageTitle,
+        menuItems: {
           Strings.signOut: inject<SignOut>().execute,
           Strings.settings: null,
         },

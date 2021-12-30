@@ -16,6 +16,6 @@ class GetMessages {
       .collection(Conversation.conversationsCollection)
       .doc(conversation.uid)
       .collection(Message.messagesCollection)
-      .orderBy(Message.dateField)
+      .orderBy(Message.timeStampField)
       .snapshots();
 }

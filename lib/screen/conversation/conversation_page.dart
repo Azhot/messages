@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:flutter/scheduler.dart';
 import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/dependency_injection/use_case/add_message_to_conversation.dart';
 import 'package:messages/dependency_injection/use_case/get_messages.dart';
@@ -31,10 +30,8 @@ class ConversationPage extends StatelessWidget {
 
   // widgets
   PreferredSizeWidget appBar() => MessageAppBar(
-        conversation.title,
-        const {
-          Strings.settings: null,
-        },
+        title: conversation.title,
+        menuItems: const {Strings.settings: null},
       );
 
   Widget messagesStreamBuilder(BuildContext context) =>
@@ -55,7 +52,7 @@ class ConversationPage extends StatelessWidget {
       );
 
   Widget listMessages(QuerySnapshot snapshot) {
-    SchedulerBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       _controller.jumpTo(_controller.position.maxScrollExtent);
     });
     return Expanded(
@@ -80,7 +77,6 @@ class ConversationPage extends StatelessWidget {
           inject<AddMessageToConversation>().execute(
               conversationId: conversation.uid,
               authorId: auth.FirebaseAuth.instance.currentUser!.uid,
-              date: DateTime.now().millisecondsSinceEpoch,
               text: text),
         },
       );

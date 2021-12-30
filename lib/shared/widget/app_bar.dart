@@ -8,7 +8,11 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Map<String, dynamic> menuItems;
 
   // constructor
-  const MessageAppBar(this.title, this.menuItems, {Key? key}) : super(key: key);
+  const MessageAppBar({
+    required this.title,
+    required this.menuItems,
+    Key? key,
+  }) : super(key: key);
 
   // overrides
   @override

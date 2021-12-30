@@ -38,10 +38,8 @@ class _SignInPageState extends State<SignInPage> {
 
   // widgets
   PreferredSizeWidget appBar() => MessageAppBar(
-        Strings.signInPageTitle,
-        {
-          Strings.register: widget._toggleView,
-        },
+        title: Strings.signInPageTitle,
+        menuItems: {Strings.register: widget._toggleView},
       );
 
   Widget body() => Container(

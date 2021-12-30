@@ -17,7 +17,6 @@ class AddMessageToConversation {
   Future<bool> execute({
     required String conversationId,
     required String authorId,
-    required int date,
     required String text,
   }) async {
     try {
@@ -25,13 +24,15 @@ class AddMessageToConversation {
           .collection(Conversation.conversationsCollection)
           .doc(conversationId);
 
+      int timeStamp = DateTime.now().millisecondsSinceEpoch;
+
       await doc.collection(Message.messagesCollection).add({
         Message.authorIdField: authorId,
-        Message.dateField: date,
+        Message.timeStampField: timeStamp,
         Message.textField: text,
       });
 
-      await doc.update({Conversation.lastUpdateField: date});
+      await doc.update({Conversation.lastUpdateField: timeStamp});
 
       return true;
     } catch (e) {

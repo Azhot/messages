@@ -6,24 +6,24 @@ class Message {
   // static constants
   static const messagesCollection = 'messages';
   static const authorIdField = 'authorId';
-  static const dateField = 'date';
+  static const timeStampField = 'timeStamp';
   static const textField = 'text';
 
   // variables
   final String authorId;
-  final int date;
+  final int timeStamp;
   final String text;
 
   // constructors
   Message({
     required this.authorId,
-    required this.date,
+    required this.timeStamp,
     required this.text,
   });
 
   // overrides
   @override
-  int get hashCode => authorId.hashCode ^ date.hashCode ^ text.hashCode;
+  int get hashCode => authorId.hashCode ^ timeStamp.hashCode ^ text.hashCode;
 
   @override
   bool operator ==(Object other) {
@@ -31,41 +31,41 @@ class Message {
 
     return other is Message &&
         other.authorId == authorId &&
-        other.date == date &&
+        other.timeStamp == timeStamp &&
         other.text == text;
   }
 
   @override
   String toString() =>
-      'Message($authorIdField: $authorId, $dateField: $date, $textField: $text)';
+      'Message($authorIdField: $authorId, $timeStampField: $timeStamp, $textField: $text)';
 
   // functions
   Message copyWith({
     String? authorId,
-    int? date,
+    int? timeStamp,
     String? text,
   }) =>
       Message(
         authorId: authorId ?? this.authorId,
-        date: date ?? this.date,
+        timeStamp: timeStamp ?? this.timeStamp,
         text: text ?? this.text,
       );
 
   Map<String, dynamic> toMap() => {
         authorIdField: authorId,
-        dateField: date,
+        timeStampField: timeStamp,
         textField: text,
       };
 
   factory Message.fromMap(Map<String, dynamic> map) => Message(
         authorId: map[authorIdField] ?? '',
-        date: map[dateField]?.toInt() ?? 0,
+        timeStamp: map[timeStampField]?.toInt() ?? 0,
         text: map[textField] ?? '',
       );
 
   factory Message.fromDocumentSnapshot(DocumentSnapshot doc) => Message(
         authorId: doc[authorIdField],
-        date: doc[dateField],
+        timeStamp: doc[timeStampField],
         text: doc[textField],
       );
 
