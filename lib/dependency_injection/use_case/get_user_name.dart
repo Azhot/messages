@@ -11,9 +11,10 @@ class GetUserName {
   GetUserName(this._firebaseFirestore);
 
   // functions
-  Future<String> execute(String userId) async => _firebaseFirestore
-      .collection(User.usersCollection)
-      .doc(userId)
-      .get()
-      .then((user) => user.get(User.nameField));
+  Future<String> execute({required String userId}) async =>
+      await _firebaseFirestore
+          .collection(User.usersCollection)
+          .doc(userId)
+          .get()
+          .then((user) => user.get(User.nameField));
 }

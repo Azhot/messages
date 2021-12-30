@@ -50,8 +50,9 @@ class ConversationViewholder extends StatelessWidget {
             fontSize: 16),
       );
 
-  Widget subtitle() => FutureBuilder<String>(
-        future: inject<GetConversationSubtitle>().execute(conversation),
+  Widget subtitle() => FutureBuilder<String?>(
+        future: inject<GetConversationSubtitle>()
+            .execute(conversation: conversation),
         builder: (context, snapshot) => Text(
           snapshot.data ?? '',
           overflow: TextOverflow.ellipsis,

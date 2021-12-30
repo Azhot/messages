@@ -13,9 +13,7 @@ class CreateConversation {
   CreateConversation(this._firebaseFirestore);
 
   // functions
-  Future<bool> execute({
-    required String title,
-  }) async {
+  Future<bool> execute({required String title}) async {
     try {
       await _firebaseFirestore
           .collection(Conversation.conversationsCollection)

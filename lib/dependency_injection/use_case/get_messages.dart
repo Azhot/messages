@@ -12,10 +12,11 @@ class GetMessages {
   GetMessages(this._firebaseFirestore);
 
   // functions
-  Stream<QuerySnapshot> execute(Conversation conversation) => _firebaseFirestore
-      .collection(Conversation.conversationsCollection)
-      .doc(conversation.uid)
-      .collection(Message.messagesCollection)
-      .orderBy(Message.timeStampField)
-      .snapshots();
+  Stream<QuerySnapshot> execute({required Conversation conversation}) =>
+      _firebaseFirestore
+          .collection(Conversation.conversationsCollection)
+          .doc(conversation.uid)
+          .collection(Message.messagesCollection)
+          .orderBy(Message.timeStampField)
+          .snapshots();
 }

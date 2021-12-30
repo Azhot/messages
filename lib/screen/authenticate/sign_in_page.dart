@@ -85,7 +85,11 @@ class _SignInPageState extends State<SignInPage> {
         onPressed: () async {
           if (_formKey.currentState?.validate() == true) {
             setState(() => _isLoading = true);
-            if (await inject<SignIn>().execute(_email, _password) == null) {
+            if (await inject<SignIn>().execute(
+                  email: _email,
+                  password: _password,
+                ) ==
+                null) {
               setState(() {
                 _error = Strings.errorInvalidCredentials;
                 _isLoading = false;

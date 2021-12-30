@@ -13,7 +13,10 @@ class SignIn {
   SignIn(this._firebaseAuth);
 
   // functions
-  Future<User?> execute(String email, String password) async {
+  Future<User?> execute({
+    required String email,
+    required String password,
+  }) async {
     try {
       auth.UserCredential credential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);

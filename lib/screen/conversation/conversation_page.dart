@@ -36,7 +36,7 @@ class ConversationPage extends StatelessWidget {
 
   Widget messagesStreamBuilder(BuildContext context) =>
       StreamBuilder<QuerySnapshot>(
-          stream: inject<GetMessages>().execute(conversation),
+          stream: inject<GetMessages>().execute(conversation: conversation),
           builder: (context, snapshot) =>
               snapshot.connectionState == ConnectionState.waiting
                   ? const Loading()

@@ -11,6 +11,8 @@ class GetUsers {
   GetUsers(this._firebaseFirestore);
 
   // functions
-  Stream<QuerySnapshot> execute() =>
-      _firebaseFirestore.collection(User.usersCollection).snapshots();
+  Stream<QuerySnapshot> execute() => _firebaseFirestore
+      .collection(User.usersCollection)
+      .orderBy(User.nameField)
+      .snapshots();
 }

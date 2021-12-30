@@ -73,7 +73,7 @@ class MessageViewholder extends StatelessWidget {
       );
 
   Widget messageAuthorName() => FutureBuilder<String>(
-      future: inject<GetUserName>().execute(message.authorId),
+      future: inject<GetUserName>().execute(userId: message.authorId),
       builder: (context, snapshot) => Text(
             snapshot.data ?? '',
             style: Styles.basicTextStyle(
