@@ -1,3 +1,5 @@
+import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/dependency_injection/use_case/get_user_name.dart';
 import 'package:messages/shared/constants.dart';
 import 'package:messages/model/message.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +52,7 @@ class MessageViewholder extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              messageUserName(),
+              messageAuthorName(),
               const SizedBox(height: 4),
               messageText(),
             ],
@@ -70,11 +72,16 @@ class MessageViewholder extends StatelessWidget {
         ],
       );
 
-  Text messageUserName() => Text(
-        message.authorId,
-        style: Styles.basicTextStyle(
-            color: titleColor, fontWeight: FontWeight.w500, fontSize: 16),
-      );
+  Widget messageAuthorName() => FutureBuilder<String>(
+      future: inject<GetUserName>().execute(message.authorId),
+      builder: (context, snapshot) => Text(
+            snapshot.data ?? '',
+            style: Styles.basicTextStyle(
+              color: titleColor,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ));
 
   Text messageText() => Text(
         message.text,
