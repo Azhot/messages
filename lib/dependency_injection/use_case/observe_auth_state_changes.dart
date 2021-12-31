@@ -1,11 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:injectable/injectable.dart';
 import 'package:messages/model/user.dart';
 
 @injectable
 class ObserveAuthStateChanges {
   // variables
-  final auth.FirebaseAuth _firebaseAuth;
+  final FirebaseAuth _firebaseAuth;
 
   // constructor
   ObserveAuthStateChanges(this._firebaseAuth);

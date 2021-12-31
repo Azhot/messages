@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:injectable/injectable.dart';
 import 'package:messages/dependency_injection/use_case/update_user_data.dart';
 
 @injectable
 class RegisterUser {
   // variables
-  final auth.FirebaseAuth _firebaseAuth;
+  final FirebaseAuth _firebaseAuth;
   final UpdateUserData _updateUserDataUseCase;
 
   // constructor
@@ -20,7 +20,7 @@ class RegisterUser {
     required String name,
   }) async {
     try {
-      auth.UserCredential credential = await _firebaseAuth
+      UserCredential credential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
       if (credential.user == null) throw Exception('credential.user is null');
       await credential.user!.updateDisplayName(name);

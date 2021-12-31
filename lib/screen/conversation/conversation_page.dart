@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/dependency_injection/use_case/add_message_to_conversation.dart';
 import 'package:messages/dependency_injection/use_case/delete_conversation.dart';
@@ -72,7 +72,7 @@ class ConversationPage extends StatelessWidget {
             messages: snapshot.docs
                 .map((doc) => Message.fromDocumentSnapshot(doc))
                 .toList(),
-            currentUserId: inject<auth.FirebaseAuth>().currentUser?.uid),
+            currentUserId: inject<FirebaseAuth>().currentUser?.uid),
       ),
     );
   }
@@ -83,7 +83,7 @@ class ConversationPage extends StatelessWidget {
         onSend: (String text) => {
           inject<AddMessageToConversation>().execute(
               conversationId: conversation.uid,
-              authorId: auth.FirebaseAuth.instance.currentUser!.uid,
+              authorId: FirebaseAuth.instance.currentUser!.uid,
               text: text),
         },
       );

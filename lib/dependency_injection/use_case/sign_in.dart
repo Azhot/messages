@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:injectable/injectable.dart';
 import 'package:messages/model/user.dart';
 
 @injectable
 class SignIn {
   // variables
-  final auth.FirebaseAuth _firebaseAuth;
+  final FirebaseAuth _firebaseAuth;
 
   // constructor
   SignIn(this._firebaseAuth);
@@ -18,7 +18,7 @@ class SignIn {
     required String password,
   }) async {
     try {
-      auth.UserCredential credential = await _firebaseAuth
+      UserCredential credential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       return credential.user != null
           ? User.fromAuthUser(credential.user!)
