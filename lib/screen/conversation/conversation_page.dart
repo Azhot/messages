@@ -5,6 +5,7 @@ import 'package:messages/dependency_injection/use_case/add_message_to_conversati
 import 'package:messages/dependency_injection/use_case/delete_conversation.dart';
 import 'package:messages/dependency_injection/use_case/get_messages.dart';
 import 'package:messages/model/message.dart';
+import 'package:messages/model/user.dart';
 import 'package:messages/screen/conversation/message_viewholder.dart';
 import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/model/conversation.dart';
@@ -13,6 +14,7 @@ import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/widget/send_text_field.dart';
 import 'package:messages/shared/widget/something_went_wrong.dart';
+import 'package:provider/provider.dart';
 
 class ConversationPage extends StatelessWidget {
   // variables
@@ -49,16 +51,16 @@ class ConversationPage extends StatelessWidget {
                   ? const Loading()
                   : (snapshot.hasError || snapshot.data == null)
                       ? const SomethingWentWrong()
-                      : body(snapshot.data!));
+                      : body(context, snapshot.data!));
 
-  Widget body(QuerySnapshot snapshot) => Column(
+  Widget body(BuildContext context, QuerySnapshot snapshot) => Column(
         children: [
-          listMessages(snapshot),
-          sendMessage(),
+          listMessages(context, snapshot),
+          sendMessage(context),
         ],
       );
 
-  Widget listMessages(QuerySnapshot snapshot) {
+  Widget listMessages(BuildContext context, QuerySnapshot snapshot) {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       _controller.jumpTo(_controller.position.maxScrollExtent);
     });
@@ -72,18 +74,18 @@ class ConversationPage extends StatelessWidget {
             messages: snapshot.docs
                 .map((doc) => Message.fromDocumentSnapshot(doc))
                 .toList(),
-            currentUserId: inject<FirebaseAuth>().currentUser?.uid),
+            currentUserId: Provider.of<User>(context).uid),
       ),
     );
   }
 
-  Widget sendMessage() => SendTextField(
+  Widget sendMessage(BuildContext context) => SendTextField(
         hintText: Strings.writeAMessage,
         maxLines: 5,
         onSend: (String text) => {
           inject<AddMessageToConversation>().execute(
               conversationId: conversation.uid,
-              authorId: FirebaseAuth.instance.currentUser!.uid,
+              authorId: Provider.of<User>(context, listen: false).uid,
               text: text),
         },
       );

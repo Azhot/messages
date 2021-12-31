@@ -32,7 +32,7 @@ class MessageViewholder extends StatelessWidget {
   // static functions
   static List<MessageViewholder> toMessageViewholders({
     required List<Message> messages,
-    required String? currentUserId,
+    required String currentUserId,
   }) =>
       messages
           .map((message) => message.authorId == currentUserId
