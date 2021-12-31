@@ -10,8 +10,9 @@ import 'package:messages/shared/widget/something_went_wrong.dart';
 import 'package:provider/provider.dart';
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Styles.setSystemOverlayStyle();
-  configureDependencyInjection();
+  await configureDependencyInjection();
   runApp(const MyApp());
 }
 

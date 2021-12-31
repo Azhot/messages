@@ -67,6 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
   SizedBox spacer() => const SizedBox(height: 16);
 
   TextFormField nameField() => TextFormField(
+        initialValue: _name,
         style: Styles.basicTextStyle(),
         decoration: Styles.textInputDecoration(Strings.name),
         validator: (value) => (value?.length != null && value!.length < 3)
@@ -76,6 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   TextFormField emailField() => TextFormField(
+        initialValue: _email,
         style: Styles.basicTextStyle(),
         decoration: Styles.textInputDecoration(Strings.email),
         validator: (value) =>
@@ -84,6 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   TextFormField passwordField() => TextFormField(
+        initialValue: _password,
         style: Styles.basicTextStyle(),
         decoration: Styles.textInputDecoration(Strings.password),
         obscureText: true,
@@ -100,8 +103,12 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   void onValidateButtonPressed() async {
-    if (_formKey.currentState?.validate() == true) {
+    if (_formKey.currentState?.validate() != true) {
+      setState(() => _error = '');
+    } else {
       setState(() => _isLoading = true);
+      _email = _email.trim().toLowerCase();
+      _name = _name.trim();
       if (!await inject<RegisterUser>().execute(
         email: _email,
         password: _password,
@@ -112,8 +119,6 @@ class _RegisterPageState extends State<RegisterPage> {
           _isLoading = false;
         });
       }
-    } else {
-      setState(() => _error = '');
     }
   }
 

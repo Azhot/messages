@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/shared/constants.dart';
 import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
 import 'package:messages/dependency_injection/use_case/sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+@injectable
 class SignInPage extends StatefulWidget {
   // variables
   final Function _toggleView;
@@ -23,7 +27,8 @@ class _SignInPageState extends State<SignInPage> {
   // state variables
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
-  String _email = '';
+  String _email =
+      inject<SharedPreferences>().getString(Constants.emailSharedPrefKey) ?? '';
   String _password = '';
   String _error = '';
 
@@ -64,6 +69,7 @@ class _SignInPageState extends State<SignInPage> {
   SizedBox spacer() => const SizedBox(height: 16);
 
   TextFormField emailField() => TextFormField(
+        initialValue: _email,
         style: Styles.basicTextStyle(),
         decoration: Styles.textInputDecoration(Strings.email),
         validator: (value) =>
@@ -72,6 +78,7 @@ class _SignInPageState extends State<SignInPage> {
       );
 
   TextFormField passwordField() => TextFormField(
+        initialValue: _password,
         style: Styles.basicTextStyle(),
         decoration: Styles.textInputDecoration(Strings.password),
         obscureText: true,
@@ -83,20 +90,22 @@ class _SignInPageState extends State<SignInPage> {
 
   ElevatedButton validateButton() => ElevatedButton(
         onPressed: () async {
-          if (_formKey.currentState?.validate() == true) {
-            setState(() => _isLoading = true);
-            if (await inject<SignIn>().execute(
-                  email: _email,
-                  password: _password,
-                ) ==
-                null) {
-              setState(() {
-                _error = Strings.errorInvalidCredentials;
-                _isLoading = false;
-              });
-            }
-          } else {
+          if (_formKey.currentState?.validate() != true) {
             setState(() => _error = '');
+          } else {
+            setState(() => _isLoading = true);
+            _email = _email.trim().toLowerCase();
+            await inject<SignIn>().execute(
+                      email: _email,
+                      password: _password,
+                    ) ==
+                    null
+                ? setState(() {
+                    _error = Strings.errorInvalidCredentials;
+                    _isLoading = false;
+                  })
+                : inject<SharedPreferences>()
+                    .setString(Constants.emailSharedPrefKey, _email);
           }
         },
         child: const Text(Strings.signIn),

@@ -4,5 +4,6 @@ import 'package:messages/dependency_injection/injection.config.dart';
 
 final inject = GetIt.instance;
 
-@InjectableInit()
-void configureDependencyInjection() => $initGetIt(inject);
+@injectableInit
+Future<void> configureDependencyInjection({String? environment}) async =>
+    await $initGetIt(inject, environment: environment);
