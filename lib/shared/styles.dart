@@ -5,12 +5,13 @@ import 'package:messages/shared/constants.dart';
 
 abstract class Styles {
   static void setSystemOverlayStyle() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Constants.primaryColorDark,
-      statusBarIconBrightness: Brightness.dark,
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Constants.primaryColorLight,
       systemNavigationBarDividerColor: Constants.primaryColorLight,
       systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
     ));
   }
 

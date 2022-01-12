@@ -19,7 +19,6 @@ class _AuthenticateWrapperState extends State<AuthenticateWrapper> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return showSignIn ? SignInPage(toggleView) : RegisterPage(toggleView);
-  }
+  Widget build(BuildContext context) =>
+      showSignIn ? SignInPage(toggleView) : RegisterPage(toggleView);
 }

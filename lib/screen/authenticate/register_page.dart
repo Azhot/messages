@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:messages/dependency_injection/injection.dart';
+import 'package:messages/shared/constants.dart';
 import 'package:messages/shared/widget/app_bar.dart';
 import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
 import 'package:messages/dependency_injection/use_case/register_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   // variables
@@ -114,6 +116,8 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _password,
         name: _name,
       )) {
+        inject<SharedPreferences>()
+            .setString(Constants.emailSharedPrefKey, _email);
         setState(() {
           _error = Strings.errorInvalidEmail;
           _isLoading = false;

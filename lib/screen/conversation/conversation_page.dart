@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/dependency_injection/use_case/add_message_to_conversation.dart';
 import 'package:messages/dependency_injection/use_case/delete_conversation.dart';
@@ -34,6 +33,7 @@ class ConversationPage extends StatelessWidget {
   // widgets
   PreferredSizeWidget appBar(BuildContext context) => MessageAppBar(
         title: conversation.title,
+        centerTitle: false,
         menuItems: {
           Strings.deleteConversation: () => {
                 inject<DeleteConversation>()

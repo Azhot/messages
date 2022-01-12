@@ -24,12 +24,18 @@ class _SendTextFieldState extends State<SendTextField> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => Theme(
         data: Styles.appTheme(primaryColor: Constants.secondaryColorLight),
-        child: container(context),
+        child: container(),
       );
 
-  Container container(BuildContext context) => Container(
+  Container container() => Container(
         decoration: BoxDecoration(
           color: Constants.primaryColorLight,
           boxShadow: [
@@ -41,10 +47,10 @@ class _SendTextFieldState extends State<SendTextField> {
             ),
           ],
         ),
-        child: textField(context),
+        child: textField(),
       );
 
-  TextField textField(BuildContext context) => TextField(
+  TextField textField() => TextField(
         controller: _controller,
         onChanged: (value) => setState(() {}),
         minLines: 1,
@@ -58,10 +64,10 @@ class _SendTextFieldState extends State<SendTextField> {
             contentPadding: const EdgeInsets.all(16),
             hintText: widget.hintText,
             hintStyle: Styles.hintTextStyle(),
-            suffixIcon: iconButton(context)),
+            suffixIcon: iconButton()),
       );
 
-  IconButton iconButton(BuildContext context) => IconButton(
+  IconButton iconButton() => IconButton(
         icon: const Icon(Icons.send),
         splashColor: Colors.green,
         splashRadius: 10,

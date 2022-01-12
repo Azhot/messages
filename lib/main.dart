@@ -4,6 +4,7 @@ import 'package:messages/dependency_injection/injection.dart';
 import 'package:messages/dependency_injection/use_case/observe_auth_state_changes.dart';
 import 'package:messages/model/user.dart';
 import 'package:messages/screen/home_wrapper.dart';
+import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
 import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/widget/something_went_wrong.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
 
   MaterialApp materialApp(Widget home) => MaterialApp(
         debugShowCheckedModeBanner: false,
+        title: Strings.appName,
         theme: Styles.appTheme(),
         home: home,
       );

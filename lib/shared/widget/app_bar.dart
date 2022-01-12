@@ -5,11 +5,13 @@ import 'package:messages/shared/styles.dart';
 class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
   // variables
   final String title;
+  final bool centerTitle;
   final Map<String, dynamic> menuItems;
 
   // constructor
   const MessageAppBar({
     required this.title,
+    this.centerTitle = true,
     required this.menuItems,
     Key? key,
   }) : super(key: key);
@@ -20,7 +22,7 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
         iconTheme: const IconThemeData(color: Constants.primaryColorDark),
         backgroundColor: Constants.primaryColor,
         title: barTitle(),
-        centerTitle: true,
+        centerTitle: centerTitle,
         actions: [menu()],
         actionsIconTheme:
             const IconThemeData(color: Constants.secondaryColorDark),
