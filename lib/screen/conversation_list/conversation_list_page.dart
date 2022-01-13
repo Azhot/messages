@@ -12,13 +12,10 @@ import 'package:messages/shared/widget/loading.dart';
 import 'package:messages/shared/widget/something_went_wrong.dart';
 
 class ConversationListPage extends StatelessWidget {
-// variables
-  final TextEditingController controller = TextEditingController();
+  // constructor
+  const ConversationListPage({Key? key}) : super(key: key);
 
-// constructor
-  ConversationListPage({Key? key}) : super(key: key);
-
-// overrides
+  // overrides
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: appBar(),
@@ -26,7 +23,7 @@ class ConversationListPage extends StatelessWidget {
         floatingActionButton: floatingActionButton(context),
       );
 
-// private functions
+  // functions
   MessageAppBar appBar() => MessageAppBar(
         title: Strings.homePageTitle,
         menuItems: {
@@ -75,7 +72,7 @@ class ConversationListPage extends StatelessWidget {
         onPressed: () => {
           showModalBottomSheet(
             context: context,
-            builder: (context) => ModalBottomSheet(controller),
+            builder: (context) => const ModalBottomSheet(),
           )
         },
       );

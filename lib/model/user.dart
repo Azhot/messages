@@ -25,14 +25,12 @@ class User {
   int get hashCode => uid.hashCode ^ email.hashCode ^ name.hashCode;
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is User &&
-        other.uid == uid &&
-        other.email == email &&
-        other.name == name;
-  }
+  bool operator ==(Object other) => identical(this, other)
+      ? true
+      : other is User &&
+          other.uid == uid &&
+          other.email == email &&
+          other.name == name;
 
   @override
   String toString() =>
@@ -43,29 +41,24 @@ class User {
     String? uid,
     String? email,
     String? name,
-  }) {
-    return User(
-      uid: uid ?? this.uid,
-      email: email ?? this.email,
-      name: name ?? this.name,
-    );
-  }
+  }) =>
+      User(
+        uid: uid ?? this.uid,
+        email: email ?? this.email,
+        name: name ?? this.name,
+      );
 
-  Map<String, dynamic> toMap() {
-    return {
-      uidField: uid,
-      emailField: email,
-      nameField: name,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+        uidField: uid,
+        emailField: email,
+        nameField: name,
+      };
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
-      uid: map[uidField] ?? '',
-      email: map[emailField] ?? '',
-      name: map[nameField] ?? '',
-    );
-  }
+  factory User.fromMap(Map<String, dynamic> map) => User(
+        uid: map[uidField] ?? '',
+        email: map[emailField] ?? '',
+        name: map[nameField] ?? '',
+      );
 
   String toJson() => json.encode(toMap());
 
@@ -76,4 +69,6 @@ class User {
         email: user.email ?? '',
         name: user.displayName ?? '',
       );
+
+  factory User.empty() => User(uid: '', email: '', name: '');
 }

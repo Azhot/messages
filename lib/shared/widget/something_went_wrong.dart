@@ -4,10 +4,10 @@ import 'package:messages/shared/strings.dart';
 import 'package:messages/shared/styles.dart';
 
 class SomethingWentWrong extends StatelessWidget {
-  const SomethingWentWrong({
-    Key? key,
-  }) : super(key: key);
+  // constructors
+  const SomethingWentWrong({Key? key}) : super(key: key);
 
+  // overrides
   @override
   Widget build(BuildContext context) => Material(
         color: Constants.primaryColorLight,

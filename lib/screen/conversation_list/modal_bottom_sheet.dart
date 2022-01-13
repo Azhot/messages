@@ -11,11 +11,8 @@ import 'package:messages/shared/widget/send_text_field.dart';
 import 'package:messages/shared/widget/something_went_wrong.dart';
 
 class ModalBottomSheet extends StatelessWidget {
-  // variables
-  final TextEditingController controller;
-
   // constructors
-  const ModalBottomSheet(this.controller, {Key? key}) : super(key: key);
+  const ModalBottomSheet({Key? key}) : super(key: key);
 
   // overrides
   @override
